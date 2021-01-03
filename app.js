@@ -2,15 +2,22 @@ const fs = require("fs")
 
 // Current working directory
 const cwd = process.cwd()
+
 // Get all files in the cwd
-const files = fs.readdirSync(cwd)
+let files
+try {
+     files = fs.readdirSync(cwd)
+} catch (error) {
+     console.log("Error reading files\n", error)
+}
+
 
 // Loop through all the files
 files.forEach(file => {
-     // Regex for valid filenames
+     // Regex for valid file names
      const movieNameRegEx = /^(.*)(S([\d]{1,})E([\d]{1,})).*(\.[\w]{2,})$/
 
-     // check if the file name matches the movie regex
+     // check if the file name matches the movie name regex
      if (movieNameRegEx.test(file)) {
           const groups = movieNameRegEx.exec(file)
 
@@ -30,6 +37,13 @@ files.forEach(file => {
           fs.copyFile(oldMoviePath, newMoviePath + newMovieName, (err) => {
                if (err) throw err;
                console.log(`[Copied] ${movieName} -  Season ${season} Episode ${episode}`);
+
+               // Delete the file after copying
+               try {
+                    fs.unlinkSync(oldMoviePath)    
+               } catch (error) {
+                    console.log(`Couldn't delete file @ ${oldMoviePath}`)
+               }
           });
      }
 })
