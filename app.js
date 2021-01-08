@@ -15,7 +15,7 @@ try {
 // Loop through all the files
 files.forEach(file => {
      // Regex for valid file names
-     const movieNameRegEx = /^(.*)(S([\d]{1,})E([\d]{1,})).*(\.[\w]{2,})$/
+     const movieNameRegEx = new RegExp(/^(.*)(S([\d]{1,})E([\d]{1,})).*(\.[\w]{2,})$/, "i")
 
      // check if the file name matches the movie name regex
      if (movieNameRegEx.test(file)) {
