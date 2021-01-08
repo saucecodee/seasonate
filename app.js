@@ -21,7 +21,7 @@ files.forEach(file => {
      if (movieNameRegEx.test(file)) {
           const groups = movieNameRegEx.exec(file)
 
-          const movieName = groups[1].split(/[._-]/).join(" ").trim()
+          const movieName = toPascalCase(groups[1])
           const season = groups[3]
           const episode = groups[4]
           const fileExtention = groups[5]
@@ -40,10 +40,21 @@ files.forEach(file => {
 
                // Delete the file after copying
                try {
-                    fs.unlinkSync(oldMoviePath)    
+                    fs.unlinkSync(oldMoviePath)
                } catch (error) {
                     console.log(`Couldn't delete file @ ${oldMoviePath}`)
                }
           });
      }
 })
+
+// Converts the movie name to Pascal case
+function toPascalCase(str) {
+     let result = ""
+
+     str.split(/[._-]/).forEach(word => {
+          result += word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
+     });
+
+     return result.trim()
+}
